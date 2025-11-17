@@ -23,14 +23,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //-> Check if login form was submit
     }
 
     if (isset($_POST['served'])) {
-        $id = intval($_POST['queue_id']);
-        $stmt = $conn->prepare("UPDATE queue SET status='served', time_out = NOW() WHERE queue_id=?");
+        $id = intval($_POST['queue_id']); //-> 'intval' (integer value)-> this converts an a value to integer
+        $stmt = $conn->prepare("UPDATE queue SET status='served', time_out = NOW() WHERE queue_id=?"); //-> Updates status: 'serving' → 'served'
+                                                                                                       //-> Records completion time with time_out = NOW()
         $stmt->execute([$id]);
     }
 
     if (isset($_POST['voided'])) {
         $id = intval($_POST['queue_id']);
-        $stmt = $conn->prepare("UPDATE queue SET status='voided' WHERE queue_id=?");
+        $stmt = $conn->prepare("UPDATE queue SET status='voided' WHERE queue_id=?"); //-> Updates status to 'voided'
         $stmt->execute([$id]);
     }
 
@@ -39,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //-> Check if login form was submit
 }
 
 // QUERY DATA
+//Gets: The single customer currently being served (if any)
 $serving = $conn->query("
     SELECT q.*, s.name 
     FROM queue q 
@@ -48,6 +50,8 @@ $serving = $conn->query("
     LIMIT 1
 ")->fetch(PDO::FETCH_ASSOC);
 
+
+//Gets: All waiting customers in arrival order (oldest first)
 $waiting = $conn->query("
     SELECT q.*, s.name 
     FROM queue q 

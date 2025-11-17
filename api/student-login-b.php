@@ -5,7 +5,7 @@ $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $student_id = $_POST['student_id'];
-    $password = $_POST['password']; // You can remove this if not using passwords
+    $password = $_POST['password'];
 
     $stmt = $conn->prepare("SELECT * FROM students WHERE student_id = ? LIMIT 1");
     $stmt->execute([$student_id]);
