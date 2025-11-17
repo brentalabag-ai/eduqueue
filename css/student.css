@@ -1,3 +1,46 @@
 /* student.css */
-.student-box { max-width:720px; margin:40px auto; padding:28px; }
-.queue-success { font-weight:700; color:green; font-size:1.1rem; }
+.student-box {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border-radius: 1rem;
+}
+        
+.queue-number {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #0d6efd;
+    text-align: center;
+    margin: 1rem 0;
+}
+        
+.status-badge {
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+}
+        
+.stats-box {
+    background: #f8f9fa;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+        
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+        
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+        
+/* .dark-mode .student-box {
+    background: #2d3748;
+    color: #e2e8f0;
+}
+        
+.dark-mode .stats-box {
+    background: #4a5568;
+}  */

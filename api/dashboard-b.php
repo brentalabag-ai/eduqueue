@@ -1,16 +1,20 @@
 <?php
 require_once "db/config.php";
 
+//Check if user is already logged in
 if (!isset($_SESSION['user'])) { 
     header("Location: index.php"); 
     exit; 
 }
 
 // ACTIONS
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//
+if ($_SERVER['REQUEST_METHOD'] === 'POST') { //-> Check if login form was submitted
+
+    //someone presses call next and it looks for the first waiting queue number and If found → update its status to serving
     if (isset($_POST['call_next'])) {
         $next = $conn->query("SELECT queue_id FROM queue WHERE status='waiting' ORDER BY queue_id ASC LIMIT 1")
-                     ->fetchColumn();
+                ->fetchColumn();
 
         if ($next) {
             $stmt = $conn->prepare("UPDATE queue SET status='serving' WHERE queue_id=?");
