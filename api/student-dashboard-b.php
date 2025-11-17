@@ -26,6 +26,7 @@ if (isset($_POST['take_queue'])) {
     $existing = $existingQueue->fetch(PDO::FETCH_ASSOC);
 
     if ($existing) {
+        //ucfirst stands for Upper Case First, meaning it displpays the 'waiting' as 'Waiting' and the 'serving' as 'Serving' (status).
         $message = "You already have an active queue number: <strong>#{$existing['queue_number']}</strong> (Status: " . ucfirst($existing['status']) . ")";
         $myQueueData = $existing;
     } else {
@@ -56,6 +57,10 @@ if (isset($_POST['take_queue'])) {
             $message = "Error getting queue number. Please try again.";
         }
     }
+
+    // REDIRECT AFTER POST - This prevents the resubmit warning
+    header("Location: student-dashboard.php");
+    exit;
 }
 
 // GET STUDENT'S CURRENT QUEUE (if any)
