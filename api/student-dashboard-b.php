@@ -57,10 +57,12 @@ if (isset($_POST['take_queue'])) {
             $message = "Error getting queue number. Please try again.";
         }
     }
-
-    // REDIRECT AFTER POST - This prevents the resubmit warning
-    header("Location: student-dashboard.php");
-    exit;
+    
+    // REDIRECT to prevent resubmission - use the correct path
+    $redirect_url = "student_dashboard.php";
+    
+    header("Location: " . $redirect_url);
+    exit();
 }
 
 // GET STUDENT'S CURRENT QUEUE (if any)
