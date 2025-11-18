@@ -1,9 +1,9 @@
 <?php
-require_once "db/config.php";
+require_once "../db/config.php";
 
 // Check if student is logged in
 if (!isset($_SESSION['student'])) {
-    header("Location: student_login.php");
+    header("Location: ../student-management/student_login.php");
     exit;
 }
 
@@ -59,7 +59,7 @@ if (isset($_POST['take_queue'])) {
     }
     
     // REDIRECT to prevent resubmission - use the correct path
-    $redirect_url = "student_dashboard.php";
+    $redirect_url = "../student-management/student_dashboard.php";
     
     header("Location: " . $redirect_url);
     exit();

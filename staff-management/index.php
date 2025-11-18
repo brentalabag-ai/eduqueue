@@ -1,5 +1,5 @@
 <?php
-require_once "api/index-b.php"
+require_once "../api/staff-api/index-b.php"
 ?>
 <!doctype html>
 <html>
@@ -9,8 +9,8 @@ require_once "api/index-b.php"
 <title>Login - Queuing</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="css/common.css">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/index.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
 </head>
 <body>
@@ -54,13 +54,13 @@ require_once "api/index-b.php"
                 Login
             </button>
 
-            <a href="student_login.php" class="btn btn-outline-secondary w-100 mt-3">
+            <a href="../student-management/student_login.php" class="btn btn-outline-secondary w-100 mt-3">
                 <span class="material-symbols-outlined" style="vertical-align:middle">school</span>
                 Student Login
             </a>
         </form>
     </div>
 
-    <script src="js/darkmode.js"></script>
+    <script src="../js/darkmode.js"></script>
     </body>
 </html>

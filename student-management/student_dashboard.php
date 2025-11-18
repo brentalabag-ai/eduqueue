@@ -1,5 +1,5 @@
 <?php
-require_once "api/student-dashboard-b.php";
+require_once "../api/student-api/student-dashboard-b.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,8 +9,8 @@ require_once "api/student-dashboard-b.php";
     <title>Student Dashboard - Queue System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="css/common.css">
-    <link rel="stylesheet" href="css/student.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/student.css">
 </head>
 <body>
     <!-- Dark Mode Toggle -->
@@ -18,7 +18,7 @@ require_once "api/student-dashboard-b.php";
         <i class="bi bi-moon-stars"></i>
     </button>
 
-    <p class="mt-3"><a href="api/student-logout-b.php">Logout</a></p>
+    <p class="mt-3"><a href="../api/student-api/student-logout-b.php">Logout</a></p>
 
     <div class="container-fluid">
         <div class="student-box card fade-in">
@@ -117,7 +117,7 @@ require_once "api/student-dashboard-b.php";
 
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/darkmode.js"></script>
-    <script src="js/autorefresh.js"></script>
+    <script src="../js/darkmode.js"></script>
+    <script src="../js/autorefresh.js"></script>
 </body>
 </html>

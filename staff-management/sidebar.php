@@ -6,12 +6,12 @@
         Queuing System
     </h4>
 
-    <a class="sidebar-link" href="dashboard.php">
+    <a class="sidebar-link" href="../staff-management/dashboard.php">
         <span class="material-symbols-outlined nav-icon">record_voice_over</span>
         Serving
     </a>
 
-    <a class="sidebar-link" href="reports.php">
+    <a class="sidebar-link" href="../staff-management/reports.php">
         <span class="material-symbols-outlined nav-icon">analytics</span>
         Reports
     </a>
