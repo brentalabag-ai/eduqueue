@@ -54,10 +54,10 @@ require_once "../api/staff-api/index-b.php"
                 Login
             </button>
 
-            <a href="../student-management/student_login.php" class="btn btn-outline-secondary w-100 mt-3">
+            <!-- <a href="../student-management/student_login.php" class="btn btn-outline-secondary w-100 mt-3">
                 <span class="material-symbols-outlined" style="vertical-align:middle">school</span>
                 Student Login
-            </a>
+            </a> -->
         </form>
     </div>
 

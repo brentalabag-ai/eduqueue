@@ -55,7 +55,7 @@ require_once "../api/student-api/student-login-b.php"
     </form>
 
 
-    <p class="mt-3"><a href="../staff-management/index.php">← Back to Login</a></p>
+    <!-- <p class="mt-3"><a href="../staff-management/index.php">← Back to Login</a></p> -->
 </div>
 
 <script src="../js/darkmode.js"></script>
