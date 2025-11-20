@@ -108,7 +108,7 @@ require_once "../api/student-api/student-dashboard-b.php";
             <?php if (!$myQueueData || $myQueueData['status'] === 'served'): ?>
                 <form method="post" class="text-center">
                     <button name="take_queue" class="btn btn-primary btn-lg">
-                        <i class="bi bi-ticket-perforated"></i> Take Queue Number
+                        <i class="bi bi-ticket-perforated" href="payment_slip.php"></i> Take Queue Number
                     </button>
                 </form>
             <?php endif; ?>
