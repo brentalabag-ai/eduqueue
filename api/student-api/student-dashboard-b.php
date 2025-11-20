@@ -13,6 +13,12 @@ $message = "";
 $myQueueData = null;
 $nowServing = null;
 $queuePosition = null;
+$paymentSlipData = null;
+
+// Get payment slip data if it exists
+if (isset($_SESSION['payment_slip'])) {
+    $paymentSlipData = $_SESSION['payment_slip'];
+}
 
 // AUTO-CREATE QUEUE AFTER PAYMENT SLIP
 if (isset($_SESSION['payment_slip']) && (!isset($_SESSION['queue_created_after_payment']) || $_SESSION['queue_created_after_payment'] !== true)) {
@@ -43,12 +49,33 @@ if (isset($_SESSION['payment_slip']) && (!isset($_SESSION['queue_created_after_p
 
         $next = $last ? $last + 1 : 1;
 
+        // Insert payment slip data into queue
+        $paymentForText = '';
+        if (isset($_SESSION['payment_slip']['payment_for'])) {
+            $paymentForLabels = [
+                'tuition' => 'Tuition Fee',
+                'transcript' => 'Transcript', 
+                'overdue' => 'Overdue',
+                'others' => 'Others'
+            ];
+            
+            $paymentTypes = [];
+            foreach ($_SESSION['payment_slip']['payment_for'] as $paymentType) {
+                $label = $paymentForLabels[$paymentType] ?? ucfirst($paymentType);
+                if ($paymentType === 'others' && !empty($_SESSION['payment_slip']['other_purpose'])) {
+                    $label .= ': ' . $_SESSION['payment_slip']['other_purpose'];
+                }
+                $paymentTypes[] = $label;
+            }
+            $paymentForText = implode(', ', $paymentTypes);
+        }
+
         $stmt = $conn->prepare("
-            INSERT INTO queue (student_id, queue_number, status, time_in) 
-            VALUES (?, ?, 'waiting', NOW())
+            INSERT INTO queue (student_id, queue_number, status, time_in, payment_amount, payment_for) 
+            VALUES (?, ?, 'waiting', NOW(), ?, ?)
         ");
         
-        if ($stmt->execute([$student['student_id'], $next])) {
+        if ($stmt->execute([$student['student_id'], $next, $_SESSION['payment_slip']['amount'], $paymentForText])) {
             $message = "Your queue number is: <strong>#{$next}</strong>";
             
             // Get the newly created queue data
@@ -121,7 +148,7 @@ $nowServing = $conn->query("
     JOIN students s ON q.student_id = s.student_id
     WHERE q.status = 'serving' AND DATE(q.time_in) = CURDATE()
     ORDER BY q.queue_id ASC 
-    LIMIT 5
+    LIMIT 1
 ")->fetch(PDO::FETCH_ASSOC);
 
 // GET QUEUE STATISTICS

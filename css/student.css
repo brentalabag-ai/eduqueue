@@ -35,6 +35,48 @@
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+.payment-slip-preview {
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background: #f8f9fa;
+}
+.payment-slip-header {
+    border-bottom: 2px solid #000;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.payment-detail {
+    margin-bottom: 10px;
+    padding: 8px;
+    background: white;
+    border-radius: 4px;
+    border-left: 4px solid #007bff;
+}
+.payment-for-badge {
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+.modal-payment-slip-container {
+    max-width: 100%;
+}
+.modal-form-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+}
+.modal-reference-code {
+    font-size: 0.8em;
+    color: #666;
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #ccc;
+}
         
 /* .dark-mode .student-box {
     background: #2d3748;

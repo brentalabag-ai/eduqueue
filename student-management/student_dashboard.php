@@ -1,3 +1,4 @@
+
 <?php
 require_once "../api/student-api/student-dashboard-b.php";
 ?>
@@ -37,12 +38,86 @@ require_once "../api/student-api/student-dashboard-b.php";
                 </div>
             <?php endif; ?>
 
+            <!-- Payment Slip Preview Section -->
+            <?php if ($paymentSlipData && (!isset($_SESSION['queue_created_after_payment']) || !$_SESSION['queue_created_after_payment'])): ?>
+                <div class="payment-slip-preview">
+                    <div class="payment-slip-header">
+                        <h4 class="mb-1">Saint Louis College</h4>
+                        <p class="mb-1">City of San Fernando, 2500 La Union</p>
+                        <h5 class="mb-0">PAYMENT SLIP PREVIEW</h5>
+                    </div>
+
+                    <!-- Student Information -->
+                    <div class="mb-3">
+                        <h6><i class="bi bi-person-badge"></i> Student Information</h6>
+                        <div class="payment-detail">
+                            <strong>NAME:</strong> <?= htmlspecialchars($student['name']) ?>
+                        </div>
+                        <div class="payment-detail">
+                            <strong>ID NO:</strong> <?= htmlspecialchars($student['student_id']) ?>
+                        </div>
+                        <div class="payment-detail">
+                            <strong>COURSE & YEAR:</strong> <?= htmlspecialchars($student['course']) ?> - <?= htmlspecialchars($student['year_level']) ?>
+                        </div>
+                    </div>
+
+                    <!-- Payment Details -->
+                    <div class="mb-3">
+                        <h6><i class="bi bi-cash-coin"></i> Payment Details</h6>
+                        <div class="payment-detail">
+                            <strong>AMOUNT:</strong> ₱<?= number_format($paymentSlipData['amount'], 2) ?>
+                        </div>
+                        <div class="payment-detail">
+                            <strong>IN PAYMENT OF:</strong><br>
+                            <?php
+                            $paymentForLabels = [
+                                'tuition' => 'Tuition Fee',
+                                'transcript' => 'Transcript',
+                                'overdue' => 'Overdue',
+                                'others' => 'Others'
+                            ];
+                            
+                            foreach ($paymentSlipData['payment_for'] as $paymentType): 
+                                $label = $paymentForLabels[$paymentType] ?? ucfirst($paymentType);
+                            ?>
+                                <span class="badge bg-primary payment-for-badge">
+                                    <?= htmlspecialchars($label) ?>
+                                    <?php if ($paymentType === 'others' && !empty($paymentSlipData['other_purpose'])): ?>
+                                        : <?= htmlspecialchars($paymentSlipData['other_purpose']) ?>
+                                    <?php endif; ?>
+                                </span>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+
+                    <!-- Date -->
+                    <div class="payment-detail">
+                        <strong>DATE:</strong> <?= date('F j, Y') ?>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="mt-3 text-center">
+                        <small class="text-muted">
+                            <i class="bi bi-info-circle"></i> 
+                            Your payment slip is ready. Click "Take Queue Number" below to proceed.
+                        </small>
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <!-- My Queue Information -->
             <?php if ($myQueueData): ?>
                 <div class="alert alert-primary">
-                    <h5 class="alert-heading">
-                        <i class="bi bi-ticket-perforated"></i> Your Queue
-                    </h5>
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="alert-heading mb-0">
+                            <i class="bi bi-ticket-perforated"></i> Your Queue
+                        </h5>
+                        <?php if ($paymentSlipData): ?>
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#paymentSlipModal">
+                                <i class="bi bi-receipt"></i> View Payment Slip
+                            </button>
+                        <?php endif; ?>
+                    </div>
                     <div class="queue-number">#<?= $myQueueData['queue_number'] ?></div>
                     <div class="text-center">
                         <span class="badge status-badge 
@@ -107,15 +182,167 @@ require_once "../api/student-api/student-dashboard-b.php";
             <!-- Take Queue Button (only show if no active queue) -->
             <?php if (!$myQueueData || $myQueueData['status'] === 'served'): ?>
                 <div class="text-center">
-                    <form method="post">
-                        <button type="submit" name="take_queue" class="btn btn-primary btn-lg">
+                    <?php if ($paymentSlipData && (!isset($_SESSION['queue_created_after_payment']) || !$_SESSION['queue_created_after_payment'])): ?>
+                        <!-- Show form to create queue with existing payment slip -->
+                        <form method="post">
+                            <button type="submit" name="take_queue" class="btn btn-success btn-lg">
+                                <i class="bi bi-check-circle"></i> Take Queue Number with Payment Slip
+                            </button>
+                        </form>
+                        <small class="text-muted d-block mt-2">
+                            Your payment slip information will be used for your queue.
+                        </small>
+                    <?php else: ?>
+                        <!-- Show link to payment slip page -->
+                        <a href="payment_slip.php" class="btn btn-primary btn-lg">
                             <i class="bi bi-ticket-perforated"></i> Take Queue Number
-                        </button>
-                    </form>
+                        </a>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+
+            <!-- Edit Payment Slip Button (if payment slip exists but queue not created) -->
+            <?php if ($paymentSlipData && (!isset($_SESSION['queue_created_after_payment']) || !$_SESSION['queue_created_after_payment'])): ?>
+                <div class="text-center mt-2">
+                    <a href="payment_slip.php" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-pencil"></i> Edit Payment Slip
+                    </a>
                 </div>
             <?php endif; ?>
         </div>
     </div>
+
+    <!-- Payment Slip Modal -->
+    <?php if ($paymentSlipData): ?>
+    <div class="modal fade" id="paymentSlipModal" tabindex="-1" aria-labelledby="paymentSlipModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentSlipModalLabel">
+                        <i class="bi bi-receipt"></i> Payment Slip
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-payment-slip-container">
+                        <!-- Header -->
+                        <div class="payment-slip-header text-center">
+                            <h1 class="h3 mb-1">Saint Louis College</h1>
+                            <p class="mb-1">City of San Fernando, 2500 La Union</p>
+                            <h2 class="h4 mb-0">PAYMENT SLIP</h2>
+                        </div>
+
+                        <!-- Student Information -->
+                        <div class="modal-form-section">
+                            <h5 class="mb-3"><i class="bi bi-person-badge"></i> Student Information</h5>
+                            
+                            <div class="mb-3">
+                                <label class="form-label"><strong>NAME:</strong></label>
+                                <div class="form-control-plaintext border-bottom pb-2">
+                                    <?= htmlspecialchars($student['name']) ?>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label"><strong>ID NO:</strong></label>
+                                <div class="form-control-plaintext border-bottom pb-2">
+                                    <?= htmlspecialchars($student['student_id']) ?>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label"><strong>COURSE & YEAR:</strong></label>
+                                <div class="form-control-plaintext border-bottom pb-2">
+                                    <?= htmlspecialchars($student['course']) ?> - <?= htmlspecialchars($student['year_level']) ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Details -->
+                        <div class="modal-form-section">
+                            <h5 class="mb-3"><i class="bi bi-cash-coin"></i> Payment Details</h5>
+                            
+                            <div class="mb-3">
+                                <label class="form-label"><strong>AMOUNT:</strong></label>
+                                <div class="form-control-plaintext border-bottom pb-2 fw-bold">
+                                    ₱<?= number_format($paymentSlipData['amount'], 2) ?>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label"><strong>IN PAYMENT OF:</strong></label>
+                                <div class="payment-options">
+                                    <?php
+                                    $paymentForLabels = [
+                                        'tuition' => 'Tuition Fee',
+                                        'transcript' => 'Transcript',
+                                        'overdue' => 'Overdue',
+                                        'others' => 'Others'
+                                    ];
+                                    
+                                    foreach ($paymentForLabels as $key => $label): 
+                                        $isChecked = in_array($key, $paymentSlipData['payment_for']);
+                                    ?>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" 
+                                                   <?= $isChecked ? 'checked' : '' ?> disabled>
+                                            <label class="form-check-label">
+                                                <?= $label ?>
+                                                <?php if ($key === 'others' && !empty($paymentSlipData['other_purpose'])): ?>
+                                                    : <?= htmlspecialchars($paymentSlipData['other_purpose']) ?>
+                                                <?php endif; ?>
+                                            </label>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Date and Queue Info -->
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="form-label"><strong>DATE:</strong></label>
+                                <div class="form-control-plaintext border-bottom pb-2">
+                                    <?= date('F j, Y') ?>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label"><strong>QUEUE NUMBER:</strong></label>
+                                <div class="form-control-plaintext border-bottom pb-2 fw-bold text-primary">
+                                    #<?= $myQueueData['queue_number'] ?? 'Pending' ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reference Code -->
+                        <div class="modal-reference-code">
+                            <div class="row">
+                                <div class="col-4">
+                                    <strong>Reference Code</strong><br>
+                                    FM-TREA-001
+                                </div>
+                                <div class="col-4">
+                                    <strong>Revision No.</strong><br>
+                                    0
+                                </div>
+                                <div class="col-4">
+                                    <strong>Effectivity Date</strong><br>
+                                    August 1, 2019
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="window.print()">
+                        <i class="bi bi-printer"></i> Print
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
 
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
