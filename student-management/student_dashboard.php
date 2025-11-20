@@ -106,11 +106,13 @@ require_once "../api/student-api/student-dashboard-b.php";
 
             <!-- Take Queue Button (only show if no active queue) -->
             <?php if (!$myQueueData || $myQueueData['status'] === 'served'): ?>
-                <form method="post" class="text-center">
-                    <button name="take_queue" class="btn btn-primary btn-lg">
-                        <i class="bi bi-ticket-perforated" href="payment_slip.php"></i> Take Queue Number
-                    </button>
-                </form>
+                <div class="text-center">
+                    <form method="post">
+                        <button type="submit" name="take_queue" class="btn btn-primary btn-lg">
+                            <i class="bi bi-ticket-perforated"></i> Take Queue Number
+                        </button>
+                    </form>
+                </div>
             <?php endif; ?>
         </div>
     </div>

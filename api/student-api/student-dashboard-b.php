@@ -1,3 +1,4 @@
+
 <?php
 require_once "../db/config.php";
 
@@ -13,8 +14,8 @@ $myQueueData = null;
 $nowServing = null;
 $queuePosition = null;
 
-// TAKE QUEUE NUMBER
-if (isset($_POST['take_queue'])) {
+// AUTO-CREATE QUEUE AFTER PAYMENT SLIP
+if (isset($_SESSION['payment_slip']) && (!isset($_SESSION['queue_created_after_payment']) || $_SESSION['queue_created_after_payment'] !== true)) {
     // Check if student already has an active queue number today
     $existingQueue = $conn->prepare("
         SELECT queue_number, status, queue_id 
@@ -26,9 +27,12 @@ if (isset($_POST['take_queue'])) {
     $existing = $existingQueue->fetch(PDO::FETCH_ASSOC);
 
     if ($existing) {
-        //ucfirst stands for Upper Case First, meaning it displpays the 'waiting' as 'Waiting' and the 'serving' as 'Serving' (status).
         $message = "You already have an active queue number: <strong>#{$existing['queue_number']}</strong> (Status: " . ucfirst($existing['status']) . ")";
         $myQueueData = $existing;
+        
+        // Clear payment slip since queue already exists
+        unset($_SESSION['payment_slip']);
+        unset($_SESSION['queue_created_after_payment']);
     } else {
         // Get the last queue number for today
         $last = $conn->query("
@@ -53,16 +57,29 @@ if (isset($_POST['take_queue'])) {
                 'status' => 'waiting',
                 'queue_id' => $conn->lastInsertId()
             ];
+            
+            // Mark that queue was created after payment
+            $_SESSION['queue_created_after_payment'] = true;
         } else {
             $message = "Error getting queue number. Please try again.";
         }
     }
-    
-    // REDIRECT to prevent resubmission - use the correct path
-    $redirect_url = "../student-management/student_dashboard.php";
-    
-    header("Location: " . $redirect_url);
-    exit();
+}
+
+// MANUAL QUEUE CREATION (if user comes directly without payment slip)
+if (isset($_POST['take_queue'])) {
+    // Check if payment slip is completed
+    if (!isset($_SESSION['payment_slip'])) {
+        // Redirect to payment slip page
+        header("Location: payment_slip.php");
+        exit();
+    } else {
+        // If payment slip exists but queue wasn't created, redirect to refresh and auto-create
+        if (!isset($_SESSION['queue_created_after_payment'])) {
+            header("Location: student_dashboard.php");
+            exit();
+        }
+    }
 }
 
 // GET STUDENT'S CURRENT QUEUE (if any)
@@ -75,6 +92,12 @@ if (!$myQueueData) {
     ");
     $myQueueQuery->execute([$student['student_id']]);
     $myQueueData = $myQueueQuery->fetch(PDO::FETCH_ASSOC);
+    
+    // If we found an existing queue, clear any payment slip data
+    if ($myQueueData) {
+        unset($_SESSION['payment_slip']);
+        unset($_SESSION['queue_created_after_payment']);
+    }
 }
 
 // CALCULATE QUEUE POSITION (if student has a waiting queue)
