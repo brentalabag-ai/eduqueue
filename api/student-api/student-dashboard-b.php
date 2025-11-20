@@ -121,7 +121,7 @@ $nowServing = $conn->query("
     JOIN students s ON q.student_id = s.student_id
     WHERE q.status = 'serving' AND DATE(q.time_in) = CURDATE()
     ORDER BY q.queue_id ASC 
-    LIMIT 1
+    LIMIT 5
 ")->fetch(PDO::FETCH_ASSOC);
 
 // GET QUEUE STATISTICS
