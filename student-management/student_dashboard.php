@@ -1,4 +1,3 @@
-
 <?php
 require_once "../api/student-api/student-dashboard-b.php";
 ?>
@@ -12,6 +11,43 @@ require_once "../api/student-api/student-dashboard-b.php";
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/student.css">
+    <style>
+        .payment-slip-preview {
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+        }
+        .payment-slip-header {
+            border-bottom: 2px solid #000;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .payment-detail {
+            margin-bottom: 10px;
+            padding: 8px;
+            background: white;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+        .payment-for-badge {
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .form-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+        .queue-actions {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #dee2e6;
+        }
+    </style>
 </head>
 <body>
     <!-- Dark Mode Toggle -->
@@ -38,6 +74,125 @@ require_once "../api/student-api/student-dashboard-b.php";
                 </div>
             <?php endif; ?>
 
+            <!-- Payment Slip Modal -->
+            <div class="modal fade" id="paymentSlipModal" tabindex="-1" aria-labelledby="paymentSlipModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="paymentSlipModalLabel">
+                                <i class="bi bi-receipt"></i> Payment Slip
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="payment-slip-container">
+                                <!-- Header -->
+                                <div class="payment-slip-header text-center">
+                                    <h1 class="h3 mb-1">Saint Louis College</h1>
+                                    <p class="mb-1">City of San Fernando, 2500 La Union</p>
+                                    <h2 class="h4 mb-0">PAYMENT SLIP</h2>
+                                </div>
+
+                                <!-- Student Information -->
+                                <div class="form-section">
+                                    <h5 class="mb-3"><i class="bi bi-person-badge"></i> Student Information</h5>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label"><strong>NAME:</strong></label>
+                                        <input type="text" class="form-control" value="<?= htmlspecialchars($student['name']) ?>" readonly>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label"><strong>ID NO:</strong></label>
+                                        <input type="text" class="form-control" value="<?= htmlspecialchars($student['student_id']) ?>" readonly>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label"><strong>COURSE & YEAR:</strong></label>
+                                        <input type="text" class="form-control" value="<?= htmlspecialchars($student['course'] ?? '') ?> - <?= htmlspecialchars($student['year_level'] ?? '') ?>" readonly>
+                                    </div>
+                                </div>
+
+                                <!-- Payment Details -->
+                                <div class="form-section">
+                                    <h5 class="mb-3"><i class="bi bi-cash-coin"></i> Payment Details</h5>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label"><strong>AMOUNT:</strong></label>
+                                        <div class="input-group amount-input">
+                                            <span class="input-group-text">₱</span>
+                                            <input type="text" class="form-control" value="<?= isset($paymentSlipData) ? number_format($paymentSlipData['amount'], 2) : '0.00' ?>" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label"><strong>IN PAYMENT OF:</strong></label>
+                                        <div class="payment-options">
+                                            <?php if (isset($paymentSlipData) && !empty($paymentSlipData['payment_for'])): ?>
+                                                <?php
+                                                $paymentForLabels = [
+                                                    'tuition' => 'Tuition Fee',
+                                                    'transcript' => 'Transcript',
+                                                    'overdue' => 'Overdue',
+                                                    'others' => 'Others'
+                                                ];
+                                                
+                                                foreach ($paymentSlipData['payment_for'] as $paymentType): 
+                                                    $label = $paymentForLabels[$paymentType] ?? ucfirst($paymentType);
+                                                    $checked = in_array($paymentType, $paymentSlipData['payment_for']) ? 'checked' : '';
+                                                ?>
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" <?= $checked ?> disabled>
+                                                        <label class="form-check-label">
+                                                            <?= htmlspecialchars($label) ?>
+                                                            <?php if ($paymentType === 'others' && !empty($paymentSlipData['other_purpose'])): ?>
+                                                                : <?= htmlspecialchars($paymentSlipData['other_purpose']) ?>
+                                                            <?php endif; ?>
+                                                        </label>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
+                                                <div class="text-muted">No payment information available</div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Date -->
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>DATE:</strong></label>
+                                    <input type="text" class="form-control" value="<?= date('F j, Y') ?>" readonly>
+                                </div>
+
+                                <!-- Reference Code -->
+                                <div class="reference-code mt-4 pt-3 border-top">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <strong>Reference Code</strong><br>
+                                            FM-TREA-001
+                                        </div>
+                                        <div class="col-4">
+                                            <strong>Revision No.</strong><br>
+                                            0
+                                        </div>
+                                        <div class="col-4">
+                                            <strong>Effectivity Date</strong><br>
+                                            August 1, 2019
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" onclick="window.print()">
+                                <i class="bi bi-printer"></i> Print
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Payment Slip Preview Section -->
             <?php if ($paymentSlipData && (!isset($_SESSION['queue_created_after_payment']) || !$_SESSION['queue_created_after_payment'])): ?>
                 <div class="payment-slip-preview">
@@ -57,7 +212,7 @@ require_once "../api/student-api/student-dashboard-b.php";
                             <strong>ID NO:</strong> <?= htmlspecialchars($student['student_id']) ?>
                         </div>
                         <div class="payment-detail">
-                            <strong>COURSE & YEAR:</strong> <?= htmlspecialchars($student['course']) ?> - <?= htmlspecialchars($student['year_level']) ?>
+                            <strong>COURSE & YEAR:</strong> <?= htmlspecialchars($student['course'] ?? '') ?> - <?= htmlspecialchars($student['year_level'] ?? '') ?>
                         </div>
                     </div>
 
@@ -97,7 +252,10 @@ require_once "../api/student-api/student-dashboard-b.php";
 
                     <!-- Action Buttons -->
                     <div class="mt-3 text-center">
-                        <small class="text-muted">
+                        <button type="button" class="btn btn-info btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#paymentSlipModal">
+                            <i class="bi bi-eye"></i> View Full Payment Slip
+                        </button>
+                        <small class="text-muted d-block">
                             <i class="bi bi-info-circle"></i> 
                             Your payment slip is ready. Click "Take Queue Number" below to proceed.
                         </small>
@@ -108,16 +266,9 @@ require_once "../api/student-api/student-dashboard-b.php";
             <!-- My Queue Information -->
             <?php if ($myQueueData): ?>
                 <div class="alert alert-primary">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <h5 class="alert-heading mb-0">
-                            <i class="bi bi-ticket-perforated"></i> Your Queue
-                        </h5>
-                        <?php if ($paymentSlipData): ?>
-                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#paymentSlipModal">
-                                <i class="bi bi-receipt"></i> View Payment Slip
-                            </button>
-                        <?php endif; ?>
-                    </div>
+                    <h5 class="alert-heading">
+                        <i class="bi bi-ticket-perforated"></i> Your Queue
+                    </h5>
                     <div class="queue-number">#<?= $myQueueData['queue_number'] ?></div>
                     <div class="text-center">
                         <span class="badge status-badge 
@@ -141,6 +292,16 @@ require_once "../api/student-api/student-dashboard-b.php";
                             </div>
                         </div>
                     <?php endif; ?>
+
+                    <!-- Show Payment Slip Button in Your Queue Section -->
+                    <div class="queue-actions text-center">
+                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#paymentSlipModal">
+                            <i class="bi bi-receipt"></i> Show Payment Slip
+                        </button>
+                        <!-- <small class="text-muted d-block mt-1">
+                            Have your payment slip ready when your number is called
+                        </small> -->
+                    </div>
                 </div>
             <?php endif; ?>
 
@@ -211,138 +372,6 @@ require_once "../api/student-api/student-dashboard-b.php";
             <?php endif; ?>
         </div>
     </div>
-
-    <!-- Payment Slip Modal -->
-    <?php if ($paymentSlipData): ?>
-    <div class="modal fade" id="paymentSlipModal" tabindex="-1" aria-labelledby="paymentSlipModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="paymentSlipModalLabel">
-                        <i class="bi bi-receipt"></i> Payment Slip
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="modal-payment-slip-container">
-                        <!-- Header -->
-                        <div class="payment-slip-header text-center">
-                            <h1 class="h3 mb-1">Saint Louis College</h1>
-                            <p class="mb-1">City of San Fernando, 2500 La Union</p>
-                            <h2 class="h4 mb-0">PAYMENT SLIP</h2>
-                        </div>
-
-                        <!-- Student Information -->
-                        <div class="modal-form-section">
-                            <h5 class="mb-3"><i class="bi bi-person-badge"></i> Student Information</h5>
-                            
-                            <div class="mb-3">
-                                <label class="form-label"><strong>NAME:</strong></label>
-                                <div class="form-control-plaintext border-bottom pb-2">
-                                    <?= htmlspecialchars($student['name']) ?>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label"><strong>ID NO:</strong></label>
-                                <div class="form-control-plaintext border-bottom pb-2">
-                                    <?= htmlspecialchars($student['student_id']) ?>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label"><strong>COURSE & YEAR:</strong></label>
-                                <div class="form-control-plaintext border-bottom pb-2">
-                                    <?= htmlspecialchars($student['course']) ?> - <?= htmlspecialchars($student['year_level']) ?>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Payment Details -->
-                        <div class="modal-form-section">
-                            <h5 class="mb-3"><i class="bi bi-cash-coin"></i> Payment Details</h5>
-                            
-                            <div class="mb-3">
-                                <label class="form-label"><strong>AMOUNT:</strong></label>
-                                <div class="form-control-plaintext border-bottom pb-2 fw-bold">
-                                    ₱<?= number_format($paymentSlipData['amount'], 2) ?>
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label"><strong>IN PAYMENT OF:</strong></label>
-                                <div class="payment-options">
-                                    <?php
-                                    $paymentForLabels = [
-                                        'tuition' => 'Tuition Fee',
-                                        'transcript' => 'Transcript',
-                                        'overdue' => 'Overdue',
-                                        'others' => 'Others'
-                                    ];
-                                    
-                                    foreach ($paymentForLabels as $key => $label): 
-                                        $isChecked = in_array($key, $paymentSlipData['payment_for']);
-                                    ?>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" 
-                                                   <?= $isChecked ? 'checked' : '' ?> disabled>
-                                            <label class="form-check-label">
-                                                <?= $label ?>
-                                                <?php if ($key === 'others' && !empty($paymentSlipData['other_purpose'])): ?>
-                                                    : <?= htmlspecialchars($paymentSlipData['other_purpose']) ?>
-                                                <?php endif; ?>
-                                            </label>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Date and Queue Info -->
-                        <div class="row">
-                            <div class="col-6">
-                                <label class="form-label"><strong>DATE:</strong></label>
-                                <div class="form-control-plaintext border-bottom pb-2">
-                                    <?= date('F j, Y') ?>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label"><strong>QUEUE NUMBER:</strong></label>
-                                <div class="form-control-plaintext border-bottom pb-2 fw-bold text-primary">
-                                    #<?= $myQueueData['queue_number'] ?? 'Pending' ?>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Reference Code -->
-                        <div class="modal-reference-code">
-                            <div class="row">
-                                <div class="col-4">
-                                    <strong>Reference Code</strong><br>
-                                    FM-TREA-001
-                                </div>
-                                <div class="col-4">
-                                    <strong>Revision No.</strong><br>
-                                    0
-                                </div>
-                                <div class="col-4">
-                                    <strong>Effectivity Date</strong><br>
-                                    August 1, 2019
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="window.print()">
-                        <i class="bi bi-printer"></i> Print
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <?php endif; ?>
 
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>

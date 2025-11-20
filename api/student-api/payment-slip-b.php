@@ -27,14 +27,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_payment_slip']
     } else {
         // Store payment slip data in session
         $_SESSION['payment_slip'] = [
-            'amount' => $amount,
+            'amount' => floatval($amount),
             'payment_for' => $payment_for,
             'other_purpose' => $other_purpose,
             'timestamp' => date('Y-m-d H:i:s')
         ];
         
+        // Clear any previous queue creation flag
+        unset($_SESSION['queue_created_after_payment']);
+        
         // Redirect to dashboard to get queue number
-        header("Location: ../student-management/student_dashboard.php");
+        header("Location: student_dashboard.php");
         exit();
     }
 }

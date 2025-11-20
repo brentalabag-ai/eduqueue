@@ -60,8 +60,9 @@ require_once "../api/student-api/payment-slip-b.php";
                         <input type="text" class="form-control" value="<?= htmlspecialchars($student['student_id']) ?>" readonly>
                     </div>
                     
-                    <div class="mb-3"></strong>COURSE & YEAR</label>
-                        <input type="text" class="form-control" value="<?= htmlspecialchars($student['course']) ?> - <?= htmlspecialchars($student['year_level']) ?>" readonly>
+                    <div class="mb-3">
+                        <label class="form-label"><strong>COURSE & YEAR:</strong></label>
+                        <input type="text" class="form-control" value="<?= htmlspecialchars($student['course'] ?? '') ?> - <?= htmlspecialchars($student['year_level'] ?? '') ?>" readonly>
                     </div>
                 </div>
 
@@ -154,18 +155,6 @@ require_once "../api/student-api/payment-slip-b.php";
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/darkmode.js"></script>
-    
-    <script>
-        // Show/hide other purpose field
-        document.getElementById('others-checkbox').addEventListener('change', function() {
-            document.getElementById('other-purpose').style.display = this.checked ? 'block' : 'none';
-        });
-
-        // Initialize other purpose field visibility
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('other-purpose').style.display = 
-                document.getElementById('others-checkbox').checked ? 'block' : 'none';
-        });
-    </script>
+    <script src="../js/slip.js"></script>
 </body>
 </html>
