@@ -60,22 +60,16 @@
     margin-right: 5px;
     margin-bottom: 5px;
 }
-.modal-payment-slip-container {
-    max-width: 100%;
-}
-.modal-form-section {
+.form-section {
     margin-bottom: 20px;
     padding: 15px;
     border: 1px solid #dee2e6;
     border-radius: 5px;
 }
-.modal-reference-code {
-    font-size: 0.8em;
-    color: #666;
-    text-align: center;
-    margin-top: 20px;
-    padding-top: 10px;
-    border-top: 1px solid #ccc;
+.queue-actions {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #dee2e6;
 }
         
 /* .dark-mode .student-box {

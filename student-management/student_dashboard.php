@@ -11,43 +11,6 @@ require_once "../api/student-api/student-dashboard-b.php";
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/student.css">
-    <style>
-        .payment-slip-preview {
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            background: #f8f9fa;
-        }
-        .payment-slip-header {
-            border-bottom: 2px solid #000;
-            padding-bottom: 15px;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        .payment-detail {
-            margin-bottom: 10px;
-            padding: 8px;
-            background: white;
-            border-radius: 4px;
-            border-left: 4px solid #007bff;
-        }
-        .payment-for-badge {
-            margin-right: 5px;
-            margin-bottom: 5px;
-        }
-        .form-section {
-            margin-bottom: 20px;
-            padding: 15px;
-            border: 1px solid #dee2e6;
-            border-radius: 5px;
-        }
-        .queue-actions {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #dee2e6;
-        }
-    </style>
 </head>
 <body>
     <!-- Dark Mode Toggle -->
@@ -252,12 +215,12 @@ require_once "../api/student-api/student-dashboard-b.php";
 
                     <!-- Action Buttons -->
                     <div class="mt-3 text-center">
-                        <button type="button" class="btn btn-info btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#paymentSlipModal">
+                        <!-- <button type="button" class="btn btn-info btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#paymentSlipModal">
                             <i class="bi bi-eye"></i> View Full Payment Slip
-                        </button>
+                        </button> -->
                         <small class="text-muted d-block">
                             <i class="bi bi-info-circle"></i> 
-                            Your payment slip is ready. Click "Take Queue Number" below to proceed.
+                            Make sure to scramble your way to the cashier's office!
                         </small>
                     </div>
                 </div>
