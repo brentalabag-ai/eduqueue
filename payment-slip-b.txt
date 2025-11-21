@@ -11,14 +11,6 @@ $student = $_SESSION['student'];
 $error = "";
 $success = "";
 
-// If user comes to edit payment slip, preserve existing data
-if ($_SERVER['REQUEST_METHOD'] !== 'POST' && isset($_SESSION['payment_slip'])) {
-    // Pre-populate form with existing session data
-    $_POST['amount'] = $_SESSION['payment_slip']['amount'];
-    $_POST['payment_for'] = $_SESSION['payment_slip']['payment_for'];
-    $_POST['other_purpose'] = $_SESSION['payment_slip']['other_purpose'];
-}
-
 // Process payment slip form
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_payment_slip'])) {
     // Validate required fields
@@ -40,9 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_payment_slip']
             'other_purpose' => $other_purpose,
             'timestamp' => date('Y-m-d H:i:s')
         ];
-        
-        // Set flag to indicate payment slip is complete
-        $_SESSION['payment_slip_complete'] = true;
         
         // Clear any previous queue creation flag
         unset($_SESSION['queue_created_after_payment']);

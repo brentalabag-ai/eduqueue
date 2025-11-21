@@ -184,14 +184,11 @@ require_once "../api/student-api/student-dashboard-b.php";
                     <?php endif; ?>
 
                     <!-- Show Payment Slip Button in Your Queue Section -->
-                    <!-- ALWAYS show if payment slip data exists, regardless of queue status -->
-                    <?php if (isset($paymentSlipData) && !empty($paymentSlipData)): ?>
-                        <div class="queue-actions text-center mt-3">
-                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#paymentSlipModal">
-                                <i class="bi bi-receipt"></i> Show Payment Slip
-                            </button>
-                        </div>
-                    <?php endif; ?>
+                    <div class="queue-actions text-center">
+                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#paymentSlipModal">
+                            <i class="bi bi-receipt"></i> Show Payment Slip
+                        </button>
+                    </div>
                 </div>
             <?php endif; ?>
 
@@ -233,7 +230,7 @@ require_once "../api/student-api/student-dashboard-b.php";
             <!-- Take Queue Button (only show if no active queue) -->
             <?php if (!$myQueueData || $myQueueData['status'] === 'served'): ?>
                 <div class="text-center">
-                    <?php if (isset($paymentSlipData) && (!isset($_SESSION['queue_created_after_payment']) || !$_SESSION['queue_created_after_payment'])): ?>
+                    <?php if ($paymentSlipData && (!isset($_SESSION['queue_created_after_payment']) || !$_SESSION['queue_created_after_payment'])): ?>
                         <!-- Show form to create queue with existing payment slip -->
                         <form method="post">
                             <button type="submit" name="take_queue" class="btn btn-success btn-lg">
@@ -253,7 +250,7 @@ require_once "../api/student-api/student-dashboard-b.php";
             <?php endif; ?>
 
             <!-- Edit Payment Slip Button (if payment slip exists but queue not created) -->
-            <?php if (isset($paymentSlipData) && (!isset($_SESSION['queue_created_after_payment']) || !$_SESSION['queue_created_after_payment'])): ?>
+            <?php if ($paymentSlipData && (!isset($_SESSION['queue_created_after_payment']) || !$_SESSION['queue_created_after_payment'])): ?>
                 <div class="text-center mt-2">
                     <a href="payment_slip.php" class="btn btn-outline-secondary btn-sm">
                         <i class="bi bi-pencil"></i> Edit Payment Slip

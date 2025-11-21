@@ -74,10 +74,6 @@ require_once "../api/student-api/payment-slip-b.php";
                         <label for="amount" class="form-label"><strong>AMOUNT:</strong></label>
                         <div class="input-group amount-input">
                             <span class="input-group-text">₱</span>
-                            <?php
-                            // Get amount from POST or session
-                            $amountValue = $_POST['amount'] ?? ($_SESSION['payment_slip']['amount'] ?? '');
-                            ?>
                             <input type="number" 
                                    class="form-control" 
                                    id="amount" 
@@ -85,50 +81,36 @@ require_once "../api/student-api/payment-slip-b.php";
                                    step="0.01" 
                                    min="0.01" 
                                    required
-                                   value="<?= htmlspecialchars($amountValue) ?>">
+                                   value="<?= htmlspecialchars($_POST['amount'] ?? '') ?>">
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label"><strong>IN PAYMENT OF:</strong></label>
                         <div class="payment-options">
-                            <?php
-                            // Get payment_for from POST or session
-                            $paymentFor = $_POST['payment_for'] ?? ($_SESSION['payment_slip']['payment_for'] ?? []);
-                            $otherPurpose = $_POST['other_purpose'] ?? ($_SESSION['payment_slip']['other_purpose'] ?? '');
-                            ?>
-                            
-                            <div class="form-check">
+                            <label class="form-check-label">
                                 <input type="checkbox" name="payment_for[]" value="tuition" class="form-check-input"
-                                    <?= (in_array('tuition', $paymentFor)) ? 'checked' : '' ?>>
-                                <label class="form-check-label">Tuition Fee</label>
-                            </div>
-                            
-                            <div class="form-check">
+                                    <?= (in_array('tuition', $_POST['payment_for'] ?? [])) ? 'checked' : '' ?>> Tuition Fee
+                            </label>
+                            <label class="form-check-label">
                                 <input type="checkbox" name="payment_for[]" value="transcript" class="form-check-input"
-                                    <?= (in_array('transcript', $paymentFor)) ? 'checked' : '' ?>>
-                                <label class="form-check-label">Transcript</label>
-                            </div>
-                            
-                            <div class="form-check">
+                                    <?= (in_array('transcript', $_POST['payment_for'] ?? [])) ? 'checked' : '' ?>> Transcript
+                            </label>
+                            <label class="form-check-label">
                                 <input type="checkbox" name="payment_for[]" value="overdue" class="form-check-input"
-                                    <?= (in_array('overdue', $paymentFor)) ? 'checked' : '' ?>>
-                                <label class="form-check-label">Overdue</label>
-                            </div>
-                            
-                            <div class="form-check">
+                                    <?= (in_array('overdue', $_POST['payment_for'] ?? [])) ? 'checked' : '' ?>> Overdue
+                            </label>
+                            <label class="form-check-label">
                                 <input type="checkbox" name="payment_for[]" value="others" class="form-check-input" id="others-checkbox"
-                                    <?= (in_array('others', $paymentFor)) ? 'checked' : '' ?>>
-                                <label class="form-check-label">Others (Please specify)</label>
-                            </div>
-                            
+                                    <?= (in_array('others', $_POST['payment_for'] ?? [])) ? 'checked' : '' ?>> Others (Please specify)
+                            </label>
                             <input type="text" 
                                    class="form-control mt-2" 
                                    id="other-purpose" 
                                    name="other_purpose" 
                                    placeholder="Specify other purpose"
-                                   value="<?= htmlspecialchars($otherPurpose) ?>"
-                                   style="display: <?= (in_array('others', $paymentFor)) ? 'block' : 'none' ?>;">
+                                   value="<?= htmlspecialchars($_POST['other_purpose'] ?? '') ?>"
+                                   style="display: none;">
                         </div>
                     </div>
                 </div>
@@ -173,17 +155,6 @@ require_once "../api/student-api/payment-slip-b.php";
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/darkmode.js"></script>
-    <script>
-        // Show/hide other purpose field based on checkbox
-        document.getElementById('others-checkbox').addEventListener('change', function() {
-            document.getElementById('other-purpose').style.display = this.checked ? 'block' : 'none';
-        });
-
-        // Initialize display on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('other-purpose').style.display = 
-                document.getElementById('others-checkbox').checked ? 'block' : 'none';
-        });
-    </script>
+    <script src="../js/slip.js"></script>
 </body>
 </html>
