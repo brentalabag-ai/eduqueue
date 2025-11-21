@@ -173,17 +173,6 @@ require_once "../api/student-api/payment-slip-b.php";
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/darkmode.js"></script>
-    <script>
-        // Show/hide other purpose field based on checkbox
-        document.getElementById('others-checkbox').addEventListener('change', function() {
-            document.getElementById('other-purpose').style.display = this.checked ? 'block' : 'none';
-        });
-
-        // Initialize display on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('other-purpose').style.display = 
-                document.getElementById('others-checkbox').checked ? 'block' : 'none';
-        });
-    </script>
+    <script src="../js/slip.js"></script>
 </body>
 </html>
