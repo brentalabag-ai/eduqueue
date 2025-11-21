@@ -37,7 +37,7 @@ require_once "../api/staff-api/reports-b.php"
     </table>
   </div>
 
-  <p class="mt-3"><a href="../dashboard.php" class="btn btn-link">Back</a></p>
+  <p class="mt-3"><a href="dashboard.php" class="btn btn-link">Back</a></p>
 </div>
 
 <script src="../js/darkmode.js"></script>
