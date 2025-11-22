@@ -1,5 +1,7 @@
+//still don't know what is the use for this
+
 <?php
-require_once "../../db/config.php";
+require_once "../../../db/config.php";
 
 $action = $_POST['action'] ?? null;
 

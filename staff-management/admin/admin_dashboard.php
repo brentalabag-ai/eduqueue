@@ -35,7 +35,7 @@ require_once "../../api/staff-api/admin/admin.php";
             </tbody>
         </table>
     </section>
-    <section>
+    <!-- <section>
         <h2>Cashier Status</h2>
         <table>
             <thead>
@@ -45,6 +45,6 @@ require_once "../../api/staff-api/admin/admin.php";
                 </tr>
             </thead>
         </table>
-    </section>
+    </section> -->
 </body>
 </html>
