@@ -28,43 +28,13 @@ function updateQueueTable(queues) {
     });
 }
 
-// Function to fetch cashier status data
-async function fetchCashierData() {
-    try {
-        const response = await fetch('../../api/staff-api/fetch_cashier_data.php');
-        const data = await response.json();
-        updateCashierTable(data.cashiers);
-    } catch (error) {
-        console.error('Error fetching cashier data:', error);
-    }
-}
-
-// Function to update the cashier table dynamically
-function updateCashierTable(cashiers) {
-    const tbody = document.querySelector('section:nth-of-type(2) table tbody');
-    tbody.innerHTML = '';
-
-    cashiers.forEach(cashier => {
-        const row = document.createElement('tr');
-
-        row.innerHTML = `
-            <td>${cashier.name}</td>
-            <td>${cashier.status}</td>
-        `;
-
-        tbody.appendChild(row);
-    });
-}
-
 // Initialize live updates
 function initializeDashboard() {
     fetchQueueData();
-    fetchCashierData();
 
     // Refresh data every 10 seconds
     setInterval(() => {
         fetchQueueData();
-        fetchCashierData();
     }, 10000);
 }
 
