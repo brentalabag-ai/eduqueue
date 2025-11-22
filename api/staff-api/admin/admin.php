@@ -1,8 +1,8 @@
 <?php
 require_once "../../db/config.php";
 
-//Check if user is already logged in
-if (!isset($_SESSION['user'])) { 
+// Check if user is logged in and is admin
+if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') { 
     header("Location: ../../staff-management/admin/admin_login.php"); 
     exit; 
 }
@@ -15,5 +15,4 @@ $queues = $conn->query("
     WHERE DATE(q.time_in) = CURDATE()
     ORDER BY q.queue_number ASC
 ")->fetchAll(PDO::FETCH_ASSOC);
-
 ?>

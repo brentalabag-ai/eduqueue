@@ -1,17 +1,14 @@
 <?php
 require_once "../../db/config.php";
 
-//Check if user is already logged in
-if (!isset($_SESSION['user'])) { 
+// Check if user is logged in and is cashier
+if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'cashier') { 
     header("Location: ../../staff-management/cashier/index.php"); 
     exit; 
 }
 
 // ACTIONS
-//
-if ($_SERVER['REQUEST_METHOD'] === 'POST') { //-> Check if login form was submitted
-
-    //someone presses call next and it looks for the first waiting queue number and If found → update its status to serving
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['call_next'])) {
         $next = $conn->query("SELECT queue_id FROM queue WHERE status='waiting' ORDER BY queue_id ASC LIMIT 1")
                 ->fetchColumn();
@@ -23,15 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //-> Check if login form was submit
     }
 
     if (isset($_POST['served'])) {
-        $id = intval($_POST['queue_id']); //-> 'intval' (integer value)-> this converts an a value to integer
-        $stmt = $conn->prepare("UPDATE queue SET status='served', time_out = NOW() WHERE queue_id=?"); //-> Updates status: 'serving' → 'served'
-                                                                                                       //-> Records completion time with time_out = NOW()
+        $id = intval($_POST['queue_id']);
+        $stmt = $conn->prepare("UPDATE queue SET status='served', time_out = NOW() WHERE queue_id=?");
         $stmt->execute([$id]);
     }
 
     if (isset($_POST['voided'])) {
         $id = intval($_POST['queue_id']);
-        $stmt = $conn->prepare("UPDATE queue SET status='voided' WHERE queue_id=?"); //-> Updates status to 'voided'
+        $stmt = $conn->prepare("UPDATE queue SET status='voided' WHERE queue_id=?");
         $stmt->execute([$id]);
     }
 
@@ -40,7 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //-> Check if login form was submit
 }
 
 // QUERY DATA
-//Gets: The single customer currently being served (if any)
 $serving = $conn->query("
     SELECT q.*, s.name 
     FROM queue q 
@@ -50,8 +45,6 @@ $serving = $conn->query("
     LIMIT 1
 ")->fetch(PDO::FETCH_ASSOC);
 
-
-//Gets: All waiting customers in arrival order (oldest first)
 $waiting = $conn->query("
     SELECT q.*, s.name 
     FROM queue q 
