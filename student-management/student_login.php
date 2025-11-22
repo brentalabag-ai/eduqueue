@@ -52,6 +52,16 @@ require_once "../api/student-api/student-login-b.php"
             <span class="material-symbols-outlined" style="vertical-align:middle">login</span>
             Login
         </button>
+
+        <!-- Add this after the login form in your student_login.php -->
+        <div class="text-center mt-3">
+            <p>Don't have an account? 
+                <a href="register.php" class="btn btn-outline-primary btn-sm">
+                    <span class="material-symbols-outlined" style="vertical-align:middle">person_add</span>
+                    Register here
+                </a>
+            </p>
+        </div>
     </form>
 
 

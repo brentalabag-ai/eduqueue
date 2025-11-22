@@ -12,13 +12,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $student = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($student) {
-        // If you want to add password checking later, add it here
-        // For now, just check if student exists
-        $_SESSION['student'] = $student;
-        header("Location: ../student-management/student_dashboard.php");
-        exit;
+        // Verify password
+        if ($password === $student['password']) {
+            $_SESSION['student'] = $student;
+            header("Location: ../student-management/student_dashboard.php");
+            exit;
+        } else {
+            $error = "Invalid Student ID or Password.";
+        }
     } else {
-        $error = "Invalid Student ID.";
+        $error = "Invalid Student ID or Password.";
     }
 }
 ?>
