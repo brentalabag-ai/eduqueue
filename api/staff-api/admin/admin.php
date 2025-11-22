@@ -3,7 +3,7 @@ require_once "../../db/config.php";
 
 //Check if user is already logged in
 if (!isset($_SESSION['user'])) { 
-    header("Location: ../../../staff-management/admin/admin_login.php"); 
+    header("Location: ../../staff-management/admin/admin_login.php"); 
     exit; 
 }
 
