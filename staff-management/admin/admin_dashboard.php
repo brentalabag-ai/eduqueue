@@ -9,11 +9,14 @@ require_once "../../api/staff-api/admin/admin.php";
     <title>Admin Dashboard</title>
     <!-- <link rel="stylesheet" href="../../css/common.css"> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../css/admin.css">
+
+    
 </head>
 <body>
+
     <div class="main-content">
 
         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -23,6 +26,10 @@ require_once "../../api/staff-api/admin/admin.php";
             </a>
         </div>
     </div>
+
+        <button class="dark-toggle" title="Toggle dark mode">
+            <i class="bi bi-moon-stars"></i>
+        </button>
 
     <div class="container-xxl">
 
@@ -52,5 +59,6 @@ require_once "../../api/staff-api/admin/admin.php";
         </section>
     </div>
     <script src="../../js/admin_dashboard.js"></script>
+    <script src="../../js/darkmode.js"></script>
 </body>
 </html>
