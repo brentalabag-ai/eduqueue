@@ -1,5 +1,5 @@
 <?php
-require_once "../api/staff-api/reports-b.php"
+require_once "../../api/staff-api/cashier/reports-b.php"
 ?>
 <!doctype html>
 <html>
@@ -8,8 +8,8 @@ require_once "../api/staff-api/reports-b.php"
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Reports - Queuing</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-<link rel="stylesheet" href="../css/common.css">
-<link rel="stylesheet" href="../css/reports.css">
+<link rel="stylesheet" href="../../css/common.css">
+<link rel="stylesheet" href="../../css/reports.css">
 </head>
 <body>
 <?php include 'sidebar.php'; ?>
@@ -40,7 +40,7 @@ require_once "../api/staff-api/reports-b.php"
   <p class="mt-3"><a href="dashboard.php" class="btn btn-link">Back</a></p>
 </div>
 
-<script src="../js/darkmode.js"></script>
-<script src="../js/autorefresh.js"></script>
+<script src="../../js/darkmode.js"></script>
+<script src="../../js/autorefresh.js"></script>
 </body>
 </html>

@@ -22,7 +22,7 @@ require_once "../../api/staff-api/admin/admin-auth.php";
     <div class="login-container card fade-in">
         <div class="login-logo">
             <i class="bi bi-ticket-perforated" style="font-size:28px;color:var(--accent)"></i>
-            <h1>Admin/Cashier Login</h1>
+            <h1>Admin Login</h1>
         </div>
         <?php if ($err): ?>
             <div class="alert alert-danger"><?=htmlspecialchars($err)?></div>

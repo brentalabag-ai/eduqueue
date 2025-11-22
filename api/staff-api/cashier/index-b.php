@@ -1,9 +1,9 @@
 <?php
-require_once "../db/config.php";
+require_once "../../db/config.php";
 
 //Check if user is already logged in
 if (isset($_SESSION['user'])) {
-    header('Location: ../staff-management/index.php'); 
+    header('Location: ../../staff-management/cashier/index.php'); 
     exit; 
 }
 
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { //-> Check if login form was submit
 
         //if login is correct -> redirected to dashboard.php
         $_SESSION['user'] = $user;
-        header('Location: ../staff-management/dashboard.php');
+        header('Location: ../../staff-management/cashier/dashboard.php');
         exit;
     } else {
         $err = 'Invalid credentials'; //-> if login fails

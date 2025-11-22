@@ -1,8 +1,8 @@
 <?php
-require_once "../db/config.php";
+require_once "../../db/config.php";
 
 if (!isset($_SESSION['user'])) {
-    header("Location: ../staff-management/index.php");
+    header("Location: ../../staff-management/cashier/index.php");
     exit;
 }
 
