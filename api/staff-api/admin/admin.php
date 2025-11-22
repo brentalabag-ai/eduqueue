@@ -13,6 +13,6 @@ $queues = $conn->query("
     FROM queue q
     JOIN students s ON q.student_id = s.student_id
     WHERE DATE(q.time_in) = CURDATE()
-    ORDER BY q.queue_number ASC
+    ORDER BY q.queue_number DESC
 ")->fetchAll(PDO::FETCH_ASSOC);
 ?>
