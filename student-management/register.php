@@ -55,16 +55,6 @@ require_once "../api/student-api/register-b.php";
         </div>
 
         <div class="form-group">
-            <label class="form-label">Student ID</label>
-            <div class="input-group">
-                <span class="input-group-text">
-                    <span class="material-symbols-outlined">badge</span>
-                </span>
-                <input type="text" name="student_id" class="form-control" value="<?= htmlspecialchars($_POST['student_id'] ?? '') ?>" required>
-            </div>
-        </div>
-
-        <div class="form-group">
             <label class="form-label">Course</label>
             <div class="input-group">
                 <span class="input-group-text">
